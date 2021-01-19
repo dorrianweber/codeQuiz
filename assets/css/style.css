@@ -29,9 +29,4 @@ p {
     border-color: rgb(192, 0, 0);
 }
 
-#timer {
-    display: flex;
-    align-items: flex-end;
-}
-
 /* @media only screen and (max-width: ) */
