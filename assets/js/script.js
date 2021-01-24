@@ -12,8 +12,6 @@ var incorrectAnswers = 0;
 var correctAnswers = 0;
 var currentScore = 0
 
-scoreDisplay.textContent = "Current score: " + currentScore;
-
 // Array of objects, each object has an array within it
 var questions = [
   {
@@ -65,7 +63,7 @@ function storeScore (userInitials) {
 function gameOver() {
   var userInitials = prompt("Thanks for playing! Enter your initials to save your score.");
   storeScore(userInitials);
-}
+};
 
 // Shows user each question after they hit "start" & after clicking "next" after answering each question
 function displayQuestion() {
@@ -76,37 +74,55 @@ function displayQuestion() {
   for (var i = 0; i < questions[qIndex].a.length; i++) {
     var answerButton = document.createElement("button");
     content.appendChild(answerButton);
+
     answerButton.textContent = questions[qIndex].a[i];
-  }
-  
-  content.addEventListener("click", function(event) {
-    compareAnswers(event);
-    // console.log(event.target.textContent);
-    // console.log(questions[qIndex].correct);
-    if (event.target.textContent === questions[qIndex].correct) {
-      currentScore ++;
+    answerButton.addEventListener("click", function(event) {
+      compareAnswers(event);
     }
-  })
-};
+  );
+}};
+
+
 
 // Creates a "next" button when user clicks on one of the answer options that moves onto the next quesiton
 function compareAnswers(event) {
-console.log(qIndex);
 
   if (event.target.matches("button")) {
     buttonSection.innerHTML = "";
     var nextButton = document.createElement("button");
     buttonSection.appendChild(nextButton);
     nextButton.textContent = "Next";
-  }
 
-  nextButton.addEventListener("click", function() {
+    nextButton.addEventListener("click", function() {
     qIndex ++;
     header.innerHTML = "";
     content.innerHTML = "";
     displayQuestion();
-  });
+  })};
+
+  console.log(event.target.textContent);
+  console.log(questions[qIndex].correct);
+  
+  if (event.target.textContent === questions[qIndex].correct) {
+    currentScore += 1;
+  };
+
+  scoreDisplay.textContent = "Current score: " + currentScore;
+  
+  console.log(qIndex);
+  console.log(currentScore);
+
 };
+
+// Clears intro text content & starts the timer when user hits "start" button
+startBtn.addEventListener("click", function() {
+  content.innerHTML = "";
+  buttonSection.innerHTML = "";
+  setTime();
+});
+
+
+
 
 // if (press incorrect answer) {
 //  timer - 3 seconds;
@@ -119,10 +135,3 @@ console.log(qIndex);
 //  correctAnswers ++;
 //  correctAnswers --> local storage;
 // }
-
-// Clears intro text content & starts the timer when user hits "start" button
-startBtn.addEventListener("click", function() {
-  content.innerHTML = "";
-  buttonSection.innerHTML = "";
-  setTime();
-});
