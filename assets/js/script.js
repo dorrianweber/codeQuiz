@@ -12,31 +12,32 @@ var viewHighscores = document.querySelector("#view-hs");
 var secondsLeft = 10;
 var qIndex = 0;
 var currentScore = 0
+var allHighscores = JSON.parse(localStorage.getItem("userInitials"));
 
 // Array of objects for each question. Answer options are an array of their own within the object.
 var questions = [
   {
-    q: "Question 1",
-    a: ["q1_a1", "q1_a2", "q1_a3"],
-    correct: "q1_a3",
+    q: "What symbols indicate that you're defining an object?",
+    a: ["( )", "[ ]", "{ }"],
+    correct: "{ }",
   },
 
   {
-    q: "Question 2",
-    a: ["q2_a1", "q2_a2", "q2_a3"],
-    correct: "q2_a1",
+    q: "Is 'textContent' a property or a function?",
+    a: ["Property", "Function", "Both"],
+    correct: "Property",
   },
 
   {
-    q: "Question 3",
-    a: ["q3_a1", "q3_a2", "q3_a3"],
-    correct: "q3_a2",
+    q: "How often should you push new commits to Github?",
+    a: ["Only after each time you define a new variable", "As often as possible", "Only once at the end of your project"],
+    correct: "As often as possible",
   },
 
   {
-    q: "Question 4",
-    a: ["q4_a1", "q4_a2", "q4_a3"],
-    correct: "q4_a1",
+    q: "Who is the smartest & most helpful TA in this bootcamp?",
+    a: ["Ryan", "Zac", "I would sooner die than choose between them"],
+    correct: "I would sooner die than choose between them",
   },
 ]
 
@@ -106,21 +107,32 @@ function compareAnswers(event) {
 
 // Puts user's initials & score in local storage
 function storeScore (userInitials) {
-  localStorage.setItem(userInitials, currentScore);
+  var newHighscore = {
+  player: userInitials,
+  score: currentScore};
+  
+  allHighscores.push(newHighscore);
+
+  localStorage.setItem("userInitials", JSON.stringify(allHighscores));
 };
 
 // Display highscores from local storage when "View Highscores" button is clicked
 viewHighscores.addEventListener("click", function(){
   header.textContent = "Highscores";
-  var storedScores = json.stringify(localStorage.getItem(userInitials));
-  content.textContent = storedScores;
+  var storedScores = JSON.parse(localStorage.getItem("userInitials"));
+  
+  for (var i = 0; i < storedScores.length; i++) {
+    var highscoreText = document.createElement("p");
+    highscoreText.textContent = storedScores[i].player + ": " + storedScores[i].score;
+    content.appendChild(highscoreText);
+  }
   console.log(storedScores);
 });
 
 // Shows the "game over" message when user runs out of time & prompts them to enter their initials
 function gameOver() {
   header.textContent = "";
-  content.innerHTML = "";
+  content.textContent = "";
   buttonSection.innerHTML = "";
   var userInitials = prompt("Thanks for playing! Enter your initials to save your score.");
   storeScore(userInitials);
